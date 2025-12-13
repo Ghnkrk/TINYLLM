@@ -1,21 +1,26 @@
-# tokenizer/train_tokenizer.py
 import json
 import os
 from datasets import load_dataset
 import sentencepiece as spm
 
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 # -------------------------------------------------
 # Load config
 # -------------------------------------------------
 
-def load_config(path="config.json"):
-    with open(path, "r") as f:
+def load_config():
+    # config.json is one level above tokenizer/
+    config_path = os.path.join(BASE_DIR, "..", "config.json")
+    with open(config_path, "r") as f:
         return json.load(f)
 
 
 # -------------------------------------------------
-# Load raw dataset (same logic as data.py)
+# Load raw dataset
 # -------------------------------------------------
 
 def load_texts(cfg):
@@ -37,9 +42,11 @@ def load_texts(cfg):
         ds = ds.shuffle(seed=42).select(range(max_samples))
 
     texts = []
+    min_len = cfg["dataset"].get("min_text_length", 20)
+
     for ex in ds:
         t = ex[text_col].replace("\n", " ").strip()
-        if len(t) > 20:
+        if len(t) >= min_len:
             texts.append(t)
 
     return texts
@@ -52,19 +59,21 @@ def load_texts(cfg):
 def train_tokenizer():
     cfg = load_config()
 
-    os.makedirs("tokenizer", exist_ok=True)
+    os.makedirs(BASE_DIR, exist_ok=True)
 
     vocab_size = cfg["tokenizer"]["vocab_size"]
-    model_prefix = cfg["tokenizer"]["model_path"].replace(".model", "")
+    model_name = os.path.basename(cfg["tokenizer"]["model_path"]).replace(".model", "")
+    model_prefix = os.path.join(BASE_DIR, model_name)
 
-    print(f"\n🔤 Training SentencePiece tokenizer")
-    print(f"Vocab size: {vocab_size}")
-    print(f"Saving to: {model_prefix}.model\n")
+    print("\n🔤 Training SentencePiece tokenizer")
+    print(f"Dataset      : {cfg['dataset']['name']}")
+    print(f"Vocab size   : {vocab_size}")
+    print(f"Save prefix  : {model_prefix}\n")
 
     texts = load_texts(cfg)
 
-    # write temp corpus
-    corpus_path = "tokenizer/corpus.txt"
+    # write temporary corpus inside tokenizer/
+    corpus_path = os.path.join(BASE_DIR, "corpus.txt")
     with open(corpus_path, "w", encoding="utf-8") as f:
         for line in texts:
             f.write(line + "\n")
@@ -73,8 +82,8 @@ def train_tokenizer():
         input=corpus_path,
         model_prefix=model_prefix,
         vocab_size=vocab_size,
-        model_type="bpe",
-        character_coverage=1.0,
+        model_type=cfg["tokenizer"].get("model_type", "bpe"),
+        character_coverage=cfg["tokenizer"].get("character_coverage", 1.0),
         split_digits=True,
         normalization_rule_name="nmt_nfkc",
         bos_id=-1,
@@ -84,7 +93,7 @@ def train_tokenizer():
     )
 
     os.remove(corpus_path)
-    print("✅ Tokenizer training complete")
+    print("✅ Tokenizer training complete\n")
 
 
 if __name__ == "__main__":
