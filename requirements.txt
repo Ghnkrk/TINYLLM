@@ -1,0 +1,13 @@
+torch>=2.0.0
+torchvision
+torchaudio
+
+datasets>=2.16.0
+huggingface-hub>=0.20.0
+
+sentencepiece>=0.1.99
+
+wandb>=0.16.0
+tqdm
+
+numpy
