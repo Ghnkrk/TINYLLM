@@ -4,7 +4,7 @@ from Architecture import DecoderOnlyTransformer
 import sentencepiece as spm
 
 
-def load_config(path="config.json"):
+def load_config(path="./config.json"):
     with open(path, "r") as f:
         return json.load(f)
 
@@ -41,3 +41,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
