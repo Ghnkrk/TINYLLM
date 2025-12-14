@@ -25,7 +25,7 @@ def load_raw_dataset(cfg):
         text_col = "text"
 
     elif name == "simplewiki":
-        ds = load_dataset("wikipedia", "20220301.simple", split="train")
+       ds = load_dataset("wikimedia/wikipedia","20231101.simple",split="train")
         text_col = "text"
 
     else:
@@ -106,3 +106,4 @@ def build_dataset(tokenizer, config_path="config.json"):
     )
 
     return LMDataset(input_ids, labels)
+
