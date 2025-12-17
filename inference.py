@@ -109,7 +109,7 @@ def main():
     parser.add_argument("--top_k", type=int, default=cfg["inference"]["top_k"])
     parser.add_argument("--top_p", type=float, default=cfg["inference"]["top_p"])
     parser.add_argument("--repetition_penalty", type=float, default=cfg["inference"]["repetition_penalty"])
-    parser.add_argument("--ckpt", type=str, default="best_model.pt")
+    parser.add_argument("--ckpt", type=str, default="checkpoint/best_model.pt")
     args = parser.parse_args()
 
     # tokenizer
@@ -148,4 +148,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
