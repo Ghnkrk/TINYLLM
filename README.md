@@ -1,6 +1,7 @@
 # TINYLLM
+TinyLLM is a compact, hands-on repository built to understand and train small-scale language models from the ground up. Instead of relying on high-level frameworks, it focuses on explicit model architecture, tokenizer training, dataset preparation, and step-controlled training loops.
 
-TINYLLM is a streamlined, lightweight repository for training and deploying large language models. Designed for customization and ease of use, this repository contains essential scripts for model training, processing datasets, and more.
+The project experiments with training decoder-only language models in the 2M–20M parameter range on carefully chosen datasets, using modern practices like step-based early stopping, cosine learning rate schedules, and mixed-precision training. Each script is designed to be reusable and configurable, making it easy to compare different model sizes and datasets while keeping the training process transparent and reproducible.
 
 ---
 
