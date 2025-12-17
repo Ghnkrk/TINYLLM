@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 # Load config
 # -------------------------------------------------
 
-def load_config(path="config_20M.json"):
+def load_config(path="./config/config_20M.json"):
     with open(path, "r") as f:
         return json.load(f)
 
@@ -92,7 +92,7 @@ class LMDataset(Dataset):
 # Public API
 # -------------------------------------------------
 
-def build_dataset(tokenizer, config_path="config.json"):
+def build_dataset(tokenizer, config_path="./config/config.json"):
     cfg = load_config(config_path)
 
     raw_ds, text_col = load_raw_dataset(cfg)
@@ -106,6 +106,7 @@ def build_dataset(tokenizer, config_path="config.json"):
     )
 
     return LMDataset(input_ids, labels)
+
 
 
 
