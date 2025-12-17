@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def load_config():
     # config.json is one level above tokenizer/
-    config_path = os.path.join(BASE_DIR, "..", "config_20M.json")
+    config_path = os.path.join(BASE_DIR, "..", "config/config_20M.json")
     with open(config_path, "r") as f:
         return json.load(f)
 
@@ -98,6 +98,7 @@ def train_tokenizer():
 
 if __name__ == "__main__":
     train_tokenizer()
+
 
 
 
