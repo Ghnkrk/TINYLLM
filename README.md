@@ -64,9 +64,8 @@ Initiate model training:
 
 ```bash
 #Configure the config file as per your requirement.
-$ python train.py --config config_{size}.json
+$ python train.py --config config.json
 ```
-Replace `{size}` with the desired configuration (e.g., `small` or `large`). You can customize the configuration files in the `configs/` directory.
 
 ### Parameter Check
 
