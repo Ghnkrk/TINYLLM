@@ -57,6 +57,10 @@ The model is evaluated and benchmarked on a standard text generation task. Below
 | **Latency / Token** | 12.02 ms | Per-token generation speed |
 | **Inference Device** | `cuda` | GPU acceleration |
 
+### 📈 Backtest Report
+
+![Backtest Report](logs/backtest_report.png)
+
 ---
 
 ## Installation
