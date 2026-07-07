@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 # Load config
 # -------------------------------------------------
 
-def load_config(path="./config/config_20M.json"):
+def load_config(path="./config/config.json"):
     with open(path, "r") as f:
         return json.load(f)
 
@@ -51,20 +51,37 @@ def clean_text(text: str) -> str:
 # -------------------------------------------------
 
 def tokenize_and_chunk(dataset, text_col, tokenizer, block_size):
-    tokens = []
+
+    input_ids = []
+    labels = []
 
     for ex in dataset:
+
         text = clean_text(ex[text_col])
+
         if len(text) < 20:
             continue
-        tokens.extend(tokenizer.encode(text, out_type=int))
 
-    input_ids, labels = [], []
+        # Encode one complete story
+        tokens = tokenizer.encode(text, out_type=int)
 
-    for i in range(0, len(tokens) - block_size, block_size):
-        chunk = tokens[i : i + block_size + 1]
-        input_ids.append(chunk[:-1])
-        labels.append(chunk[1:])
+        # Add BOS/EOS
+        tokens = [tokenizer.bos_id()] + tokens + [tokenizer.eos_id()]
+
+        # Split ONLY this story
+        for i in range(0, len(tokens) - 1, block_size):
+
+            chunk = tokens[i:i + block_size + 1]
+
+            if len(chunk) < 2:
+                continue
+
+            # Pad last chunk if needed
+            if len(chunk) < block_size + 1:
+                chunk += [tokenizer.pad_id()] * (block_size + 1 - len(chunk))
+
+            input_ids.append(chunk[:-1])
+            labels.append(chunk[1:])
 
     return input_ids, labels
 

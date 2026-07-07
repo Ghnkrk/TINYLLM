@@ -4,7 +4,7 @@ from Architecture import DecoderOnlyTransformer
 import sentencepiece as spm
 
 
-def load_config(path="./config/config_20M.json"):
+def load_config(path="./config/config.json"):
     with open(path, "r") as f:
         return json.load(f)
 
